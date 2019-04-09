@@ -1,5 +1,5 @@
 {
-  "name": "npm-compare",
+  "name": "npm-get-stats",
   "version": "1.0.0",
   "main": "src/index.js",
   "bin": "src/bin.js",
