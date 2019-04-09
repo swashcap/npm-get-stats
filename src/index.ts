@@ -1,11 +1,19 @@
-import 'perish'
-
+import debug from 'debug'
 import path from 'path'
 import puppeteer from 'puppeteer'
 
-const outDir = path.resolve(__dirname, '../images');
+const log = debug('get-npm-stats')
 
-const main = async (packages: string[]) => {
+export interface GetNpmStatsOptions {
+  outDir: string
+  packages: string[]
+}
+
+export const getNpmStats = async ({
+  outDir,
+  packages
+}: GetNpmStatsOptions) => {
+  log('Launching browser')
   const browser = await puppeteer.launch()
   const page = await browser.newPage();
 
@@ -15,7 +23,7 @@ const main = async (packages: string[]) => {
   })
 
   for (const pkg of packages) {
-    console.log(pkg)
+    log(`Fetching ${pkg}`)
     await page.goto(`https://www.npmjs.com/package/${pkg}`)
     const el = await page.$('#top > .order-0 > div:first-of-type')
 
@@ -28,7 +36,6 @@ const main = async (packages: string[]) => {
     })
   }
 
+  log('Closing browser')
   await browser.close()
 }
-
-main([])
